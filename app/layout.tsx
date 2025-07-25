@@ -6,9 +6,9 @@ import "./globals.css"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "ANTIEQ WISMA KOST - Hunian Premium untuk Generasi Muda Indonesia",
+  title: "ANTIEQ WISMA KOST - Hunian kamar inspiratif Aman nyaman tertib dengan harga ekonomis fasilitas Premium untuk Generasi Muda Indonesia",
   description:
-    "Temukan kos premium terbaik di Indonesia dengan fasilitas lengkap, lokasi strategis, dan harga terjangkau. ANTIEQ WISMA KOST - Where Dreams Meet Comfort.",
+    "Temukan kos premium terbaik di Gorontalo dengan fasilitas lengkap, lokasi strategis, dan harga terjangkau. ANTIEQ WISMA KOST - Where Dreams Meet Comfort.",
   keywords: "kos premium, wisma kost, hunian mahasiswa, kos jakarta, kos bandung, kos depok, sewa kos, antieq wisma",
   authors: [{ name: "ANTIEQ WISMA KOST Team" }],
   creator: "ANTIEQ WISMA KOST",

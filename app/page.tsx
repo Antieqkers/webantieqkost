@@ -2,19 +2,13 @@
 
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import {
   Menu,
-  Search,
   MapPin,
-  Building,
-  DollarSign,
   Star,
-  Heart,
   Users,
-  Sparkles,
   Phone,
   Mail,
   Instagram,
@@ -32,14 +26,25 @@ import {
   Clock,
   FileText,
   Moon,
+  Award,
+  MessageCircle,
+  Filter,
+  SortAsc,
+  SortDesc,
 } from "lucide-react"
+import { SearchForm } from "@/components/SearchForm"
+import { PropertyCard } from "@/components/PropertyCard"
+import { ContactForm } from "@/components/ContactForm"
+import { useSearch } from "@/hooks/useSearch"
+import type { Property } from "@/lib/types"
 
 export default function HomePage() {
-  const [location, setLocation] = useState("")
-  const [kosType, setKosType] = useState("")
-  const [priceRange, setPriceRange] = useState("")
   const [currentSlide, setCurrentSlide] = useState(0)
   const [isVisible, setIsVisible] = useState(false)
+  const [showAllProperties, setShowAllProperties] = useState(false)
+  const [selectedProperty, setSelectedProperty] = useState<Property | null>(null)
+
+  const { filteredProperties, filters, updateFilter, totalResults } = useSearch()
 
   useEffect(() => {
     setIsVisible(true)
@@ -152,54 +157,6 @@ export default function HomePage() {
     },
   ]
 
-  const featuredProperties = [
-    {
-      id: 1,
-      name: "ANTIEQ Melati Residence",
-      location: "Kota Gorontalo, Gorontalo",
-      price: "600K",
-      originalPrice: "900K",
-      rating: 4.9,
-      reviews: 85,
-      image: "/placeholder.svg?height=300&width=400&text=ANTIEQ+Melati+Gorontalo",
-      facilities: ["WiFi 100Mbps", "AC Premium", "Kamar Mandi Dalam", "Parkir Luas", "CCTV 24/7"],
-      available: 5,
-      discount: "33%",
-      isPopular: true,
-      story: "Hunian eksklusif untuk putri di jantung Kota Gorontalo dengan akses mudah ke kampus dan pusat kota",
-    },
-    {
-      id: 2,
-      name: "ANTIEQ Harmoni Elite",
-      location: "Limboto, Gorontalo",
-      price: "450K",
-      originalPrice: "650K",
-      rating: 4.8,
-      reviews: 62,
-      image: "/placeholder.svg?height=300&width=400&text=ANTIEQ+Harmoni+Limboto",
-      facilities: ["WiFi Unlimited", "Dapur Bersama", "Laundry Gratis", "Security 24/7", "Mushola"],
-      available: 8,
-      discount: "31%",
-      isPopular: false,
-      story: "Konsep co-living modern untuk putra di area Limboto yang tenang dengan suasana kampung yang asri",
-    },
-    {
-      id: 3,
-      name: "ANTIEQ Luxury Suites",
-      location: "Bone Bolango, Gorontalo",
-      price: "800K",
-      originalPrice: "1.2M",
-      rating: 4.9,
-      reviews: 94,
-      image: "/placeholder.svg?height=300&width=400&text=ANTIEQ+Luxury+Bone+Bolango",
-      facilities: ["WiFi Fiber", "AC Inverter", "Gym & Pool", "Rooftop Garden", "Coworking Space"],
-      available: 3,
-      discount: "33%",
-      isPopular: true,
-      story: "Apartemen mewah dengan pemandangan Teluk Tomini untuk profesional muda yang menghargai kualitas",
-    },
-  ]
-
   const testimonials = [
     {
       name: "Siti Nurhaliza Pakaya",
@@ -229,6 +186,35 @@ export default function HomePage() {
       location: "ANTIEQ Luxury Suites, Bone Bolango",
     },
   ]
+
+  const realPhotos = [
+    {
+      src: "/images/antieq-exterior.jpg",
+      alt: "ANTIEQ WISMA KOST - Tampak Depan Bangunan Modern",
+      title: "Bangunan Modern 2 Lantai",
+      description: "Arsitektur modern dengan balkon dan pencahayaan yang baik",
+    },
+    {
+      src: "/images/antieq-corridor.jpg",
+      alt: "ANTIEQ WISMA KOST - Koridor Bersih dan Terang",
+      title: "Koridor Premium",
+      description: "Koridor bersih dengan skylight dan ventilasi udara alami",
+    },
+    {
+      src: "/images/antieq-kitchen.jpg",
+      alt: "ANTIEQ WISMA KOST - Dapur Bersama Modern",
+      title: "Dapur Bersama",
+      description: "Dapur modern dengan kompor gas dan area memasak yang luas",
+    },
+    {
+      src: "/images/antieq-common-area.jpg",
+      alt: "ANTIEQ WISMA KOST - Area Bersama",
+      title: "Area Komunal",
+      description: "Ruang bersama dengan kulkas, hiburan, dan penyimpanan",
+    },
+  ]
+
+  const displayedProperties = showAllProperties ? filteredProperties : filteredProperties.slice(0, 6)
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 overflow-x-hidden">
@@ -286,6 +272,13 @@ export default function HomePage() {
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-indigo-600 to-purple-600 group-hover:w-full transition-all duration-300"></span>
               </a>
               <a
+                href="#gallery"
+                className="text-gray-600 hover:text-indigo-600 transition-all duration-300 font-medium relative group"
+              >
+                Galeri
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-indigo-600 to-purple-600 group-hover:w-full transition-all duration-300"></span>
+              </a>
+              <a
                 href="#story"
                 className="text-gray-600 hover:text-indigo-600 transition-all duration-300 font-medium relative group"
               >
@@ -304,6 +297,13 @@ export default function HomePage() {
                 className="text-gray-600 hover:text-indigo-600 transition-all duration-300 font-medium relative group"
               >
                 Testimoni
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-indigo-600 to-purple-600 group-hover:w-full transition-all duration-300"></span>
+              </a>
+              <a
+                href="#contact"
+                className="text-gray-600 hover:text-indigo-600 transition-all duration-300 font-medium relative group"
+              >
+                Kontak
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-indigo-600 to-purple-600 group-hover:w-full transition-all duration-300"></span>
               </a>
             </nav>
@@ -370,6 +370,7 @@ export default function HomePage() {
               <div className="text-xs mt-2 bg-white/20 rounded-full px-2 py-1 inline-block">READY UNIT</div>
             </div>
           </Card>
+
           {/* Banner 5 - PROJECT & KERJASAMA */}
           <Card className="group bg-gradient-to-br from-red-500 via-red-600 to-red-700 text-white p-6 rounded-3xl cursor-pointer transform hover:scale-105 transition-all duration-300 hover:shadow-2xl relative overflow-hidden">
             <div className="relative z-10">
@@ -390,40 +391,7 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Ultimate Facilities Section */}
-      <section id="facilities" className="relative z-10 bg-gradient-to-br from-gray-50 to-blue-50 py-20">
-        <div className="container mx-auto px-4">
-          <div className="text-center space-y-6 mb-16">
-            <h2 className="text-4xl lg:text-5xl font-bold text-gray-800 mb-8">ULTIMATE FASILITAS</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Fasilitas premium terlengkap di Gorontalo untuk mendukung gaya hidup modern Anda
-            </p>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
-            {ultimateFacilities.map((facility, index) => (
-              <Card
-                key={index}
-                className="group p-6 bg-white/80 backdrop-blur-lg border-0 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:scale-105 rounded-2xl text-center"
-              >
-                <div className="space-y-4">
-                  <div
-                    className={`w-16 h-16 bg-gradient-to-br ${facility.color} rounded-2xl flex items-center justify-center mx-auto group-hover:scale-110 transition-transform duration-300 shadow-lg`}
-                  >
-                    <facility.icon className="h-8 w-8 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-gray-800 text-sm mb-1">{facility.title}</h3>
-                    <p className="text-xs text-gray-600">{facility.description}</p>
-                  </div>
-                </div>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Hero Section with Gorontalo Focus */}
+      {/* Hero Section with Real Photos */}
       <section id="home" className="relative z-10 container mx-auto px-4 py-16">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <div
@@ -489,90 +457,18 @@ export default function HomePage() {
             </div>
 
             {/* Enhanced Search Form for Gorontalo */}
-            <Card className="p-8 bg-white/80 backdrop-blur-lg border-0 shadow-2xl rounded-3xl">
-              <div className="space-y-6">
-                <div className="text-center">
-                  <h3 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-2">
-                    🔍 Pencarian Cerdas Gorontalo
-                  </h3>
-                  <p className="text-gray-600">Temukan hunian impian di seluruh Provinsi Gorontalo</p>
-                </div>
-
-                <div className="space-y-4">
-                  <div className="space-y-2">
-                    <label className="text-sm font-semibold text-gray-700 flex items-center">
-                      <MapPin className="h-5 w-5 mr-2 text-indigo-600" />
-                      Lokasi di Gorontalo
-                    </label>
-                    <Select value={location} onValueChange={setLocation}>
-                      <SelectTrigger className="h-14 bg-gray-50 border-2 border-gray-200 rounded-2xl focus:border-indigo-500 text-lg">
-                        <SelectValue placeholder="Pilih lokasi di Gorontalo..." />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="kota-gorontalo">🏙️ Kota Gorontalo</SelectItem>
-                        <SelectItem value="limboto">🌾 Limboto</SelectItem>
-                        <SelectItem value="bone-bolango">🏖️ Bone Bolango</SelectItem>
-                        <SelectItem value="gorontalo-utara">⛰️ Gorontalo Utara</SelectItem>
-                        <SelectItem value="pohuwato">🌴 Pohuwato</SelectItem>
-                        <SelectItem value="boalemo">🏞️ Boalemo</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div className="space-y-2">
-                    <label className="text-sm font-semibold text-gray-700 flex items-center">
-                      <Building className="h-5 w-5 mr-2 text-purple-600" />
-                      Tipe Hunian Premium
-                    </label>
-                    <Select value={kosType} onValueChange={setKosType}>
-                      <SelectTrigger className="h-14 bg-gray-50 border-2 border-gray-200 rounded-2xl focus:border-purple-500 text-lg">
-                        <SelectValue placeholder="Pilih tipe hunian yang cocok..." />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="putri">🌸 ANTIEQ Putri Residence</SelectItem>
-                        <SelectItem value="putra">🏢 ANTIEQ Putra Elite</SelectItem>
-                        <SelectItem value="luxury">👑 ANTIEQ Luxury Suites</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div className="space-y-2">
-                    <label className="text-sm font-semibold text-gray-700 flex items-center">
-                      <DollarSign className="h-5 w-5 mr-2 text-green-600" />
-                      Budget Gorontalo
-                    </label>
-                    <Select value={priceRange} onValueChange={setPriceRange}>
-                      <SelectTrigger className="h-14 bg-gray-50 border-2 border-gray-200 rounded-2xl focus:border-green-500 text-lg">
-                        <SelectValue placeholder="Pilih budget yang sesuai..." />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="300k-500k">💰 Rp 300rb - 500rb (Ekonomis)</SelectItem>
-                        <SelectItem value="500k-800k">💎 Rp 500rb - 800rb (Premium)</SelectItem>
-                        <SelectItem value="800k-1.2jt">👑 Rp 800rb - 1.2jt (Elite)</SelectItem>
-                        <SelectItem value="1.2jt+">🏆 Rp 1.2jt+ (Luxury)</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <Button className="w-full h-16 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-700 hover:via-purple-700 hover:to-pink-700 text-white rounded-2xl text-xl font-bold shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-105 group">
-                    <Search className="h-6 w-6 mr-3 group-hover:animate-spin" />
-                    CARI SEKARANG
-                    <Sparkles className="h-6 w-6 ml-3 group-hover:animate-pulse" />
-                  </Button>
-                </div>
-              </div>
-            </Card>
+            <SearchForm />
           </div>
 
-          {/* Right Side - Hero Visual */}
+          {/* Right Side - Real Hero Photo */}
           <div
             className={`relative transition-all duration-1000 delay-500 ${isVisible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-10"}`}
           >
             <div className="relative">
               <div className="aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl transform hover:scale-105 transition-all duration-500 group">
                 <img
-                  src="/placeholder.svg?height=600&width=800&text=ANTIEQ+WISMA+KOST+Gorontalo+Premium"
-                  alt="ANTIEQ WISMA KOST Gorontalo Premium Building"
+                  src="/images/antieq-exterior.jpg"
+                  alt="ANTIEQ WISMA KOST Gorontalo - Bangunan Premium"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"></div>
@@ -580,8 +476,33 @@ export default function HomePage() {
                 <div className="absolute bottom-6 left-6 right-6 bg-white/90 backdrop-blur-lg p-4 rounded-2xl">
                   <h4 className="font-bold text-gray-800 mb-1">Hunian Premium Pertama di Gorontalo</h4>
                   <p className="text-sm text-gray-600">
-                    Dengan pemandangan Teluk Tomini yang menakjubkan dan fasilitas bintang 5
+                    Bangunan modern 2 lantai dengan fasilitas lengkap dan desain arsitektur terdepan
                   </p>
+                </div>
+              </div>
+
+              {/* Floating Achievement Cards */}
+              <div className="absolute -top-6 -left-6 bg-white/90 backdrop-blur-lg p-4 rounded-2xl shadow-xl animate-bounce">
+                <div className="flex items-center space-x-3">
+                  <div className="w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-xl flex items-center justify-center">
+                    <Award className="h-6 w-6 text-white" />
+                  </div>
+                  <div>
+                    <div className="font-bold text-gray-800">Best Kost 2024</div>
+                    <div className="text-sm text-gray-600">Gorontalo Property Awards</div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="absolute -bottom-6 -right-6 bg-white/90 backdrop-blur-lg p-4 rounded-2xl shadow-xl animate-pulse">
+                <div className="flex items-center space-x-3">
+                  <div className="w-12 h-12 bg-gradient-to-br from-indigo-400 to-indigo-600 rounded-xl flex items-center justify-center">
+                    <Users className="h-6 w-6 text-white" />
+                  </div>
+                  <div>
+                    <div className="font-bold text-gray-800">5K+ Happy Residents</div>
+                    <div className="text-sm text-gray-600">Komunitas Terbesar Gorontalo</div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -589,288 +510,198 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* RUMAH KOS PILIHAN Section */}
-      <section id="search" className="relative z-10 container mx-auto px-4 py-20">
-        <div className="text-center space-y-6 mb-16">
-          <h2 className="text-4xl lg:text-5xl font-bold text-gray-800">RUMAH KOS PILIHAN</h2>
-          <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-            Koleksi hunian premium terbaik di seluruh Provinsi Gorontalo dengan fasilitas lengkap dan lokasi strategis
-          </p>
-        </div>
-
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {featuredProperties.map((property, index) => (
-            <Card
-              key={property.id}
-              className={`group overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:scale-105 bg-white rounded-3xl border-0 ${
-                property.isPopular ? "ring-2 ring-gradient-to-r from-yellow-400 to-orange-500" : ""
-              }`}
-            >
-              <div className="relative">
-                <img
-                  src={property.image || "/placeholder.svg"}
-                  alt={property.name}
-                  className="w-full h-56 object-cover group-hover:scale-110 transition-transform duration-700"
-                />
-
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-
-                {property.isPopular && (
-                  <div className="absolute top-4 left-4">
-                    <Badge className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white animate-pulse">
-                      🔥 Most Popular
-                    </Badge>
-                  </div>
-                )}
-
-                <div className="absolute top-4 right-4">
-                  <Badge className="bg-gradient-to-r from-red-500 to-pink-500 text-white font-bold">
-                    -{property.discount}
-                  </Badge>
-                </div>
-
-                <Button
-                  size="icon"
-                  variant="secondary"
-                  className="absolute bottom-4 right-4 bg-white/90 hover:bg-white shadow-lg rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300"
-                >
-                  <Heart className="h-4 w-4 text-red-500" />
-                </Button>
-
-                <div className="absolute bottom-4 left-4 opacity-0 group-hover:opacity-100 transition-all duration-300">
-                  <Badge className="bg-green-500 text-white">{property.available} unit tersisa</Badge>
-                </div>
-              </div>
-
-              <CardContent className="p-6 space-y-4">
-                <div className="space-y-3">
-                  <h3 className="text-xl font-bold text-gray-800 group-hover:text-indigo-600 transition-colors duration-300">
-                    {property.name}
-                  </h3>
-                  <p className="text-gray-600 flex items-center">
-                    <MapPin className="h-4 w-4 mr-2 text-indigo-500" />
-                    {property.location}
-                  </p>
-
-                  <p className="text-sm text-gray-600 italic leading-relaxed bg-gray-50 p-3 rounded-xl">
-                    "{property.story}"
-                  </p>
-                </div>
-
-                <div className="flex items-center space-x-2">
-                  <div className="flex items-center space-x-1">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                    ))}
-                  </div>
-                  <span className="text-sm font-semibold text-gray-700">{property.rating}</span>
-                  <span className="text-sm text-gray-500">({property.reviews} ulasan)</span>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="flex items-center space-x-2">
-                      <span className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-                        Rp {property.price}
-                      </span>
-                      <span className="text-sm text-gray-500 line-through">Rp {property.originalPrice}</span>
-                    </div>
-                    <div className="text-sm text-gray-500">/bulan</div>
-                  </div>
-                </div>
-
-                <div className="flex flex-wrap gap-2">
-                  {property.facilities.slice(0, 3).map((facility, index) => (
-                    <Badge
-                      key={index}
-                      variant="outline"
-                      className="text-xs bg-indigo-50 text-indigo-600 border-indigo-200"
-                    >
-                      {facility}
-                    </Badge>
-                  ))}
-                  {property.facilities.length > 3 && (
-                    <Badge variant="outline" className="text-xs bg-gray-50 text-gray-600">
-                      +{property.facilities.length - 3} fasilitas
-                    </Badge>
-                  )}
-                </div>
-
-                <div className="flex space-x-3 pt-2">
-                  <Button className="flex-1 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl transition-all duration-300 transform hover:scale-105">
-                    Lihat Detail
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="px-4 rounded-xl border-2 hover:bg-gray-50 transition-all duration-300 bg-transparent"
-                  >
-                    <Phone className="h-4 w-4" />
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </section>
-
-      {/* Enhanced Testimonials with Gorontalo Stories */}
-      <section id="testimonials" className="relative z-10 bg-gradient-to-br from-purple-50 to-pink-50 py-20">
+      {/* Property Search & Listings */}
+      <section id="search" className="relative z-10 py-20">
         <div className="container mx-auto px-4">
           <div className="text-center space-y-6 mb-16">
-            <Badge className="bg-gradient-to-r from-green-500 to-blue-500 text-white px-6 py-3 rounded-full text-lg">
-              💬 Cerita Penghuni Gorontalo
-            </Badge>
-            <h2 className="text-4xl lg:text-5xl font-bold bg-gradient-to-r from-gray-800 to-indigo-600 bg-clip-text text-transparent">
-              Transformasi Hidup di Gorontalo
+            <h2 className="text-4xl lg:text-5xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+              RUMAH KOS PILIHAN
             </h2>
-            <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-              Anak muda Gorontalo yang telah merasakan pengalaman luar biasa tinggal di ANTIEQ WISMA KOST
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Temukan hunian impian Anda di seluruh Provinsi Gorontalo dengan fasilitas terlengkap
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <Card
-                key={index}
-                className="group p-8 bg-white/80 backdrop-blur-lg border-0 shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:scale-105 rounded-3xl"
+          {/* Filter Controls */}
+          <div className="flex flex-wrap items-center justify-between mb-8 gap-4">
+            <div className="flex items-center space-x-4">
+              <Badge variant="outline" className="text-lg px-4 py-2">
+                {totalResults} hunian ditemukan
+              </Badge>
+              {filters.location && (
+                <Badge className="bg-indigo-100 text-indigo-800">📍 {filters.location.replace("-", " ")}</Badge>
+              )}
+              {filters.type && <Badge className="bg-purple-100 text-purple-800">🏠 {filters.type}</Badge>}
+            </div>
+
+            <div className="flex items-center space-x-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => updateFilter("sortOrder", filters.sortOrder === "asc" ? "desc" : "asc")}
               >
-                <div className="space-y-6">
-                  <div className="flex items-center space-x-4">
-                    <img
-                      src={testimonial.avatar || "/placeholder.svg"}
-                      alt={testimonial.name}
-                      className="w-16 h-16 rounded-full ring-4 ring-indigo-100 group-hover:ring-indigo-200 transition-all duration-300"
-                    />
-                    <div>
-                      <h4 className="font-bold text-gray-800">{testimonial.name}</h4>
-                      <p className="text-sm text-gray-600">{testimonial.role}</p>
-                      <p className="text-xs text-indigo-600 font-medium">{testimonial.location}</p>
-                    </div>
-                  </div>
+                {filters.sortOrder === "asc" ? <SortAsc className="h-4 w-4" /> : <SortDesc className="h-4 w-4" />}
+              </Button>
+              <Button variant="outline" size="sm">
+                <Filter className="h-4 w-4 mr-2" />
+                Filter
+              </Button>
+            </div>
+          </div>
 
-                  <div className="flex space-x-1">
-                    {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star key={i} className="h-5 w-5 fill-yellow-400 text-yellow-400" />
-                    ))}
-                  </div>
-
-                  <blockquote className="text-gray-700 leading-relaxed">"{testimonial.content}"</blockquote>
-
-                  <div className="pt-4 border-t border-gray-100">
-                    <p className="text-xs text-gray-500 italic">Penghuni sejak 2023 • Verified Review ✓</p>
-                  </div>
-                </div>
-              </Card>
+          {/* Property Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+            {displayedProperties.map((property) => (
+              <PropertyCard key={property.id} property={property} onBooking={setSelectedProperty} />
             ))}
           </div>
+
+          {/* Load More Button */}
+          {filteredProperties.length > 6 && (
+            <div className="text-center">
+              <Button
+                onClick={() => setShowAllProperties(!showAllProperties)}
+                className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-8 py-3 rounded-2xl text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+              >
+                {showAllProperties
+                  ? "Tampilkan Lebih Sedikit"
+                  : `Lihat Semua (${filteredProperties.length - 6} lainnya)`}
+              </Button>
+            </div>
+          )}
         </div>
       </section>
 
-      {/* Enhanced Footer with Gorontalo Focus */}
-      <footer className="relative z-10 bg-gray-900 text-white py-16">
+      {/* Contact Section */}
+      <section id="contact" className="relative z-10 py-20">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-4 gap-8 mb-12">
+          <div className="text-center space-y-6 mb-16">
+            <h2 className="text-4xl lg:text-5xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+              HUBUNGI KAMI
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Tim ANTIEQ WISMA KOST siap membantu Anda menemukan hunian impian di Gorontalo
+            </p>
+          </div>
+
+          <ContactForm />
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="relative z-10 bg-gradient-to-br from-gray-900 via-indigo-900 to-purple-900 text-white py-16">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+            {/* Brand */}
             <div className="space-y-6">
               <div className="flex items-center space-x-3">
-                <div className="w-12 h-12 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 rounded-xl flex items-center justify-center">
-                  <Home className="w-8 h-8 text-white" />
+                <div className="w-12 h-12 bg-gradient-to-br from-indigo-400 to-purple-600 rounded-xl flex items-center justify-center">
+                  <Home className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <span className="text-2xl font-bold bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                    ANTIEQ WISMA KOST
-                  </span>
-                  <div className="text-xs text-gray-400">Gorontalo Premium Living</div>
+                  <div className="text-xl font-bold">ANTIEQ WISMA KOST</div>
+                  <div className="text-sm text-gray-300">Gorontalo Premium Living</div>
                 </div>
               </div>
-              <p className="text-gray-400 leading-relaxed">
-                Platform hunian premium pertama di Gorontalo yang telah mengubah cara 5,000+ anak muda Gorontalo
-                menemukan rumah impian mereka sejak 2019.
+              <p className="text-gray-300 leading-relaxed">
+                Hunian premium terdepan di Provinsi Gorontalo dengan fasilitas lengkap dan pelayanan terbaik untuk
+                generasi muda Indonesia.
               </p>
               <div className="flex space-x-4">
-                <Button
-                  size="icon"
-                  variant="ghost"
-                  className="text-gray-400 hover:text-white hover:bg-indigo-600 rounded-full transition-all duration-300"
-                >
-                  <Facebook className="h-5 w-5" />
-                </Button>
-                <Button
-                  size="icon"
-                  variant="ghost"
-                  className="text-gray-400 hover:text-white hover:bg-pink-600 rounded-full transition-all duration-300"
-                >
+                <Button size="icon" variant="ghost" className="text-gray-300 hover:text-white hover:bg-white/10">
                   <Instagram className="h-5 w-5" />
                 </Button>
-                <Button
-                  size="icon"
-                  variant="ghost"
-                  className="text-gray-400 hover:text-white hover:bg-blue-400 rounded-full transition-all duration-300"
-                >
+                <Button size="icon" variant="ghost" className="text-gray-300 hover:text-white hover:bg-white/10">
                   <Twitter className="h-5 w-5" />
+                </Button>
+                <Button size="icon" variant="ghost" className="text-gray-300 hover:text-white hover:bg-white/10">
+                  <Facebook className="h-5 w-5" />
                 </Button>
               </div>
             </div>
 
-            <div className="space-y-4">
-              <h3 className="font-bold text-lg text-white">Lokasi Gorontalo</h3>
+            {/* Quick Links */}
+            <div className="space-y-6">
+              <h3 className="text-lg font-bold">Quick Links</h3>
               <div className="space-y-3">
-                {["Kota Gorontalo", "Limboto", "Bone Bolango", "Gorontalo Utara", "Pohuwato"].map((item) => (
-                  <a
-                    key={item}
-                    href="#"
-                    className="block text-gray-400 hover:text-white transition-colors duration-300 hover:translate-x-2 transform"
-                  >
-                    {item}
-                  </a>
-                ))}
+                <a href="#home" className="block text-gray-300 hover:text-white transition-colors duration-300">
+                  Beranda
+                </a>
+                <a href="#facilities" className="block text-gray-300 hover:text-white transition-colors duration-300">
+                  Fasilitas
+                </a>
+                <a href="#gallery" className="block text-gray-300 hover:text-white transition-colors duration-300">
+                  Galeri
+                </a>
+                <a href="#search" className="block text-gray-300 hover:text-white transition-colors duration-300">
+                  Cari Hunian
+                </a>
+                <a href="#testimonials" className="block text-gray-300 hover:text-white transition-colors duration-300">
+                  Testimoni
+                </a>
               </div>
             </div>
 
-            <div className="space-y-4">
-              <h3 className="font-bold text-lg text-white">Koleksi Hunian</h3>
+            {/* Locations */}
+            <div className="space-y-6">
+              <h3 className="text-lg font-bold">Lokasi Gorontalo</h3>
               <div className="space-y-3">
-                {["ANTIEQ Putri Residence", "ANTIEQ Putra Elite", "ANTIEQ Luxury Suites", "ANTIEQ Co-Living"].map(
-                  (item) => (
-                    <div key={item} className="text-gray-400 hover:text-white transition-colors duration-300">
-                      {item}
-                    </div>
-                  ),
-                )}
+                <div className="flex items-center space-x-2">
+                  <MapPin className="h-4 w-4 text-indigo-400" />
+                  <span className="text-gray-300">Kota Gorontalo</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <MapPin className="h-4 w-4 text-indigo-400" />
+                  <span className="text-gray-300">Limboto</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <MapPin className="h-4 w-4 text-indigo-400" />
+                  <span className="text-gray-300">Bone Bolango</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <MapPin className="h-4 w-4 text-indigo-400" />
+                  <span className="text-gray-300">Gorontalo Utara</span>
+                </div>
               </div>
             </div>
 
-            <div className="space-y-4">
-              <h3 className="font-bold text-lg text-white">Hubungi Kami</h3>
+            {/* Contact Info */}
+            <div className="space-y-6">
+              <h3 className="text-lg font-bold">Kontak</h3>
               <div className="space-y-3">
-                <div className="text-gray-400 flex items-center hover:text-white transition-colors duration-300">
-                  <Phone className="h-4 w-4 mr-3 text-green-500" />
-                  +62 812-3456-7890
+                <div className="flex items-center space-x-3">
+                  <Phone className="h-4 w-4 text-green-400" />
+                  <span className="text-gray-300">+62 812-3456-7890</span>
                 </div>
-                <div className="text-gray-400 flex items-center hover:text-white transition-colors duration-300">
-                  <Mail className="h-4 w-4 mr-3 text-blue-500" />
-                  hello@antieqwismakost.id
+                <div className="flex items-center space-x-3">
+                  <MessageCircle className="h-4 w-4 text-green-400" />
+                  <span className="text-gray-300">WhatsApp 24/7</span>
                 </div>
-                <div className="text-gray-400 flex items-center hover:text-white transition-colors duration-300">
-                  <MapPin className="h-4 w-4 mr-3 text-red-500" />
-                  Gorontalo, Indonesia
+                <div className="flex items-center space-x-3">
+                  <Mail className="h-4 w-4 text-blue-400" />
+                  <span className="text-gray-300">hello@antieqwismakost.id</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <MapPin className="h-4 w-4 text-red-400" />
+                  <span className="text-gray-300">Gorontalo, Indonesia</span>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="border-t border-gray-800 pt-8">
-            <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-              <p className="text-gray-400 text-center md:text-left">
-                &copy; 2024 ANTIEQ WISMA KOST - Proudly Serving Gorontalo Since 2019 ❤️
-              </p>
-              <div className="flex space-x-6 text-sm text-gray-400">
-                <a href="#" className="hover:text-white transition-colors">
+          <div className="border-t border-gray-700 pt-8">
+            <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
+              <div className="text-gray-300">
+                © 2024 ANTIEQ WISMA KOST. All rights reserved. Made with ❤️ in Gorontalo.
+              </div>
+              <div className="flex items-center space-x-6 text-sm text-gray-300">
+                <a href="#" className="hover:text-white transition-colors duration-300">
                   Privacy Policy
                 </a>
-                <a href="#" className="hover:text-white transition-colors">
+                <a href="#" className="hover:text-white transition-colors duration-300">
                   Terms of Service
                 </a>
-                <a href="#" className="hover:text-white transition-colors">
+                <a href="#" className="hover:text-white transition-colors duration-300">
                   Sitemap
                 </a>
               </div>
@@ -878,6 +709,16 @@ export default function HomePage() {
           </div>
         </div>
       </footer>
+
+      {/* Floating WhatsApp Button */}
+      <div className="fixed bottom-6 right-6 z-50">
+        <Button
+          onClick={() => window.open("https://wa.me/6281234567890", "_blank")}
+          className="w-16 h-16 bg-green-500 hover:bg-green-600 text-white rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-110 animate-pulse"
+        >
+          <MessageCircle className="h-8 w-8" />
+        </Button>
+      </div>
     </div>
   )
 }
